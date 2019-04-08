@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+/* Distrikt */
+define("D_START", '48');
+define("D_START_FREMMØTE", '82');
+define("D_KM", '10.2');
+define("D_MIN", '7.15');
+define("D_TILKJORING", '17.40');
+define("D_KM_AVSTAND", '18.10');
+define("D_MINSTEPRIS", '109');
+
+/* Trondheim */
+define("T_START", '45');
+define("T_KM", '11.73');
+define("T_MIN", '9.27');
+define("T_MINSTEPRIS", '127');
+define("T_MILJOPAKKEN", '8');
+define("T_MILJOPAKKEN_9", '24');
+
+define("TAKSTER_OPPDATERT", '08.04.2019')
+
+if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
+
+
+	if($_POST['kilometer'] > 10){
+		$langtakst = 1;
+		$km = 10;
+	} else {
+		$km = $_POST['kilometer'];
+		$langtakst = 0;
+	}
+	if($_POST['henting']){
+		$henting = 1;
+		$starttakst = 48;
+	} else {
+		$starttakst = 82;
+		$henting = 0;
+	}
+	if($_POST['fremkjoring'] > 10){
+		$fremkjoring = $_POST['fremkjoring'];
+	} else {
+		$fremkjoring = 0;
+	}
+	$has_kolon = stripos($_POST['kjoretid'], ':') !== false;
+	if($has_kolon){
+		$time = explode(':', $_POST['kjoretid']);
+		$minutter = $time[0]*60 + $time[1];
+	} else {
+		$minutter = $_POST['kjoretid'];
+	}
+	$pris = $starttakst +  ($km * D_KM) + ($langtakst * (($_POST['kilometer'] - 10) * D_KM_AVSTAND)) + ($henting * ($fremkjoring * D_TILKJORING)) + (D_MIN * $minutter);
+	/* echo $starttakst ." + ".  $km ." * ". D_KM ." + ". $langtakst ." * ((". $_POST['kilometer'] ."- 10) * ". D_KM_AVSTAND .") + ". $henting ." * (". $fremkjoring ." * ". D_TILKJORING .") + ". D_MIN ." * ". $minutter ."<br />"; */
+	if($pris < D_MINSTEPRIS) {
+		$pris = D_MINSTEPRIS;
+	}
+	if($_POST['takst'] == 5){
+		$pris = $pris * 1.5;
+	} elseif($_POST['takst'] == 9){
+		$pris = $pris * 2;
+	}
+	
+	$tid = explode(':', $_POST['tid']);
+	if($_POST['ukedag'] == 'U'){
+		if($tid[0] >= 18){
+			$pris = $pris * 1.21;
+		} elseif($tid[0] >= 0 and $tid[0] < 6) {
+			$pris = $pris * 1.35;
+		}
+	} elseif($_POST['ukedag'] == 'L'){
+		if($tid[0] >= 6 AND $tid[0] < 15){
+			$pris = $pris * 1.3;
+		}else{
+			$pris = $pris * 1.35;
+		}
+	} elseif($_POST['ukedag'] == 'S'){
+		$pris = $pris * 1.35;
+	} elseif($_POST['ukedag'] == 'H'){
+		$pris = $pris * 1.45;
+	}
+	/*echo round($pris);*/
+} elseif(isset($_POST['kilometer']) AND $_POST['sone'] == "trondheim") {
+	$has_kolon = stripos($_POST['kjoretid'], ':') !== false;
+	if($has_kolon){
+		$time = explode(':', $_POST['kjoretid']);
+		$minutter = $time[0]*60 + $time[1];
+	} else {
+		$minutter = $_POST['kjoretid'];
+	}
+	$pris = T_START + ($_POST['kilometer'] * T_KM) + (T_MIN * $minutter);
+	/*echo T_START ." + (". $_POST['kilometer'] ." * ". T_KM .") + (". T_MIN ." * ". $minutter .")";*/
+	if($pris < T_MINSTEPRIS) {
+		$pris = T_MINSTEPRIS;
+	}
+	if($_POST['takst'] == 5){
+		$pris = $pris * 1.5;
+		$pris = $pris + T_MILJOPAKKEN;
+	} elseif($_POST['takst'] == 9){
+		$pris = $pris * 2;
+		$pris = $pris + T_MILJOPAKKEN_9;
+	} else {
+		$pris = $pris + T_MILJOPAKKEN;
+	}
+	/*echo round($pris);
+	echo $_POST['tid']; */
+}
+	
+?>
+
+<html lang="nb">
+  <head>
+    <title>Uoffisiell priskalkulator, Trøndertaxi</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <link href="style.css" rel="stylesheet">
+    <!-- <script src="script.js"></script> -->
+    <script>
+    function valueChanged()
+    {
+        if($('.henting').is(":checked"))   
+            $(".fremkjoring").show();
+        else
+            $(".fremkjoring").hide();
+    }
+
+	$(function() {
+	  $('#sone').change(function(){
+		if($(this).val() == 'trondheim')
+			$('.distrikt').hide();
+		else
+			$('.distrikt').show();
+	  });
+	});
+   </script>
+  </head>
+  <body>
+  <p class="disclaimer">
+  Priskalkulatoren er laget for at sjåfører raskere skal kunne regne ut forhåndspris/makspris for tur uten å måtte logge inn på ekstranett, også i tilfeller hvor app kommer til kort (flere enn 4 passasjerer, adresse ikke riktig registrert eller finnes ikke i gogle maps). Merk at kalkulatoren gir eksakt pris for en tur med de oppgitte variablene. Du må selv ta høyde for trafikkale forhold, eller annet som kan føre til lengere kjørelengde eller høyere tidsbruk.<br />
+  
+    <div id="mainform">
+      <div class="innerdiv">
+      <h2>Uoffisiell priskalkulator Trøndertaxi</h2>
+      <form id="form" name="form" action="" method="POST">
+      <div>
+		<p>
+			<label for="sone">takstområde:</label>
+			<select name="sone" id="sone">
+			  <option value="distrikt">Distrikt</option>
+			  <option value="trondheim">Trondheim</option>
+			</select>
+		</p>
+        <p>
+          <label>Kilometer:</label><br />
+          <input id="kilometer" type="text" name="kilometer">
+        </p>
+
+          <label>Kjøretid:</label><br />
+	  <input id="kjoretid" type="text" name="kjoretid">
+        </p>
+        <p>
+          <label>Tid :</label><br />
+          <input id="tid" type="time" value="<?php echo date("H:i:s") ?>" name="tid">
+        </p>
+		<p>
+		<label for="ukedag">Ukedag: </label><br />
+		<select name="ukedag" id="ukedag">
+			<option value="U">Mandag-fredag</option>
+			<option value="L">Lørdag</option>
+			<option value="S">Søndag</option>
+			<option value="H">Hellidagstakst</option>
+		</select>
+		</p>
+		<p>
+		<label for="takst">Takst: </label><br />
+		<select name="takst" id="takst">
+			<option value="1">1:4</option>
+			<option value="5">5:8</option>
+			<option value="9">9:16</option>
+		</select>
+		</p>
+		<p>
+          <label class="distrikt">Henting?</label><input class="henting distrikt" id="henting" type="checkbox" checked onchange="valueChanged()" name="henting">
+          <label class="fremkjoring distrikt">Kilometer fremkjøring:</label><br />
+          <input class="fremkjoring distrikt" type="text" id="fremkjoring" name="fremkjoring"></p>
+        <p>
+		<input id="submit" type="submit" name="submit" value="Submit">
+		<?php
+		echo $pris ."<br />";
+		echo round($pris);
+		?>
+      </div>
+    </form>
+
+    </div>
+    </div>
+	<p>
+
+  </body>
+</html>
