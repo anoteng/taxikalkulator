@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Fauna+One|Muli);
+@import url(https://fonts.googleapis.com/css?family=Fauna+One|Muli);
 /*//to load google fonts in our page.*/
 #form{
 background-color:white;
@@ -8,7 +8,7 @@ font-Weight:400;
 width:350px;
 margin:50px 250px 0 50px;
 float:left;
-height:500px;
+/*height:500px;*/
 }
 #form div{
 padding:10px 0 0 30px;
@@ -53,8 +53,17 @@ color:white;
 #clear{clear:both;
 }
 /*CSS for right side advertizement*/
-#formget{
+.disclaimer{
 float:right;
 width:30%;
 margin-top:30px;
+margin-right:100px;
+}
+footer {
+	position: absolute;
+	height: 300px;
+	width: 100%;
+	bottom:0;
+	text-align: center;
+	/*background-color: #333333;*/
 }

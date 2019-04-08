@@ -1,5 +1,20 @@
 <!DOCTYPE html>
 <?php
+/*
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -22,6 +37,7 @@ define("T_MILJOPAKKEN", '8');
 define("T_MILJOPAKKEN_9", '24');
 
 define("TAKSTER_OPPDATERT", '08.04.2019');
+define("VERSJON", '0.1a');
 
 if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 
@@ -192,10 +208,22 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 
     </div>
     </div>
-	<p class="disclaimer">
+	<div class="disclaimer">
 		Priskalkulatoren er laget for at sjåfører raskere skal kunne regne ut forhåndspris/makspris for tur uten å måtte logge inn på ekstranett, også i tilfeller hvor app kommer til kort (flere enn 4 passasjerer, adresse ikke riktig registrert eller finnes ikke i gogle maps). Merk at kalkulatoren gir eksakt pris for en tur med de oppgitte variablene. Du må selv ta høyde for trafikkale forhold, eller annet som kan føre til lengere kjørelengde eller høyere tidsbruk.<br />
-		Lisensinformasjon kommer her
+		Kalkulatoren benyttes på eget ansvar, og det gis ingen garantier for riktig pris.<br />
+		Takstinformasjon sist oppdatert <?php echo TAKSTER_OPPDATERT; ?>.<br />
+		Taxikalkulatoren versjon <?php echo VERSJON; ?>.<br />
+	</div>
+	<footer>
 	<p>
+		Copyright &copy; 2019 Andreas Noteng<br />
+		This program comes with ABSOLUTELY NO WARRANTY;<br />
+		for details see the <a href="https://www.gnu.org/licenses/gpl.html">GNU General Public License</a>, sections 15 through 17.<br />
+		This is free software, and you are welcome to redistribute it<br />
+		under certain conditions listed in the GNU General Public License.<br />
+		The source code for this project can be found on <a href="https://github.com/anoteng/taxikalkulator">GitHub</a>.
+	</p>
+	</footer>
 
   </body>
 </html>
