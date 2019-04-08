@@ -21,7 +21,7 @@ define("T_MINSTEPRIS", '127');
 define("T_MILJOPAKKEN", '8');
 define("T_MILJOPAKKEN_9", '24');
 
-define("TAKSTER_OPPDATERT", '08.04.2019')
+define("TAKSTER_OPPDATERT", '08.04.2019');
 
 if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 
@@ -113,7 +113,7 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 <html lang="nb">
   <head>
     <title>Uoffisiell priskalkulator, Trøndertaxi</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
     <link href="style.css" rel="stylesheet">
     <!-- <script src="script.js"></script> -->
     <script>
@@ -136,9 +136,6 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
    </script>
   </head>
   <body>
-  <p class="disclaimer">
-  Priskalkulatoren er laget for at sjåfører raskere skal kunne regne ut forhåndspris/makspris for tur uten å måtte logge inn på ekstranett, også i tilfeller hvor app kommer til kort (flere enn 4 passasjerer, adresse ikke riktig registrert eller finnes ikke i gogle maps). Merk at kalkulatoren gir eksakt pris for en tur med de oppgitte variablene. Du må selv ta høyde for trafikkale forhold, eller annet som kan føre til lengere kjørelengde eller høyere tidsbruk.<br />
-  
     <div id="mainform">
       <div class="innerdiv">
       <h2>Uoffisiell priskalkulator Trøndertaxi</h2>
@@ -195,6 +192,9 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 
     </div>
     </div>
+	<p class="disclaimer">
+		Priskalkulatoren er laget for at sjåfører raskere skal kunne regne ut forhåndspris/makspris for tur uten å måtte logge inn på ekstranett, også i tilfeller hvor app kommer til kort (flere enn 4 passasjerer, adresse ikke riktig registrert eller finnes ikke i gogle maps). Merk at kalkulatoren gir eksakt pris for en tur med de oppgitte variablene. Du må selv ta høyde for trafikkale forhold, eller annet som kan føre til lengere kjørelengde eller høyere tidsbruk.<br />
+		Lisensinformasjon kommer her
 	<p>
 
   </body>
