@@ -13,15 +13,7 @@ float:left;
 #form div{
 padding:10px 0 0 30px;
 }
-h3{
-margin-top:0px;
-color:white;
-background-color:forestgreen;
-text-align:center;
-width:100%;
-height:50px;
-padding-top:30px;
-}
+
 #mainform{
 width:960px;
 margin:20px auto;
@@ -39,31 +31,62 @@ border-radius:3px;
 padding:2px;
 box-shadow:0px 1px 1px 0px darkgray;
 }
+select{
+width:90%;
+height:30px;
+margin-top:10px;
+border-radius:3px;
+padding:2px;
+box-shadow:0px 1px 1px 0px darkgray;
+}
+
 .innerdiv{
 width:65%; float:left;
 }
-input[type=button]{
-background-color:forestgreen;
-border:1px solid white;
-font-family: 'Fauna One', serif;
-font-Weight:bold;
-font-size:18px;
-color:white;
-}
+
 #clear{clear:both;
 }
-/*CSS for right side advertizement*/
+/*CSS for right side disclaimer*/
 .disclaimer{
-float:right;
-width:30%;
-margin-top:30px;
-margin-right:100px;
+	/*position:absolute;
+	right:0;*/
+	float:left;
+	width:30%;
+	margin-top:30px;
+	margin-right:100px;
 }
 footer {
 	position: absolute;
-	height: 300px;
+	/*height: 300px;*/
 	width: 100%;
 	bottom:0;
 	text-align: center;
+	font-size:9pt;
 	/*background-color: #333333;*/
+}
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }

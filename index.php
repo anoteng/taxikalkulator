@@ -29,10 +29,34 @@ define("D_KM_AVSTAND", '18.10');
 define("D_MINSTEPRIS", '109');
 
 /* Trondheim */
-define("T_START", '45');
-define("T_KM", '11.73');
-define("T_MIN", '9.27');
-define("T_MINSTEPRIS", '127');
+define("T1_START", '45');
+define("T1_KM", '11.73');
+define("T1_MIN", '9.27');
+define("T1_MINSTEPRIS", '127');
+define("T2_START", '48');
+define("T2_KM", '12.89');
+define("T2_MIN", '10.19');
+define("T2_MINSTEPRIS", '138');
+define("T3_START", '58');
+define("T3_KM", '15.59');
+define("T3_MIN", '12.31');
+define("T3_MINSTEPRIS", '159');
+define("T4_START", '65');
+define("T4_KM", '17.59');
+define("T4_MIN", '13.91');
+define("T4_MINSTEPRIS", '184');
+define("T5_START", '72');
+define("T5_KM", '19,11');
+define("T5_MIN", '15.10');
+define("T5_MINSTEPRIS", '195');
+define("T3-HELG_START", '58');
+define("T3-HELG_KM", '15.59');
+define("T3-HELG_MIN", '12.31');
+define("T3-HELG_MINSTEPRIS", '159');
+define("T6_START", '77');
+define("T6_KM", '20.51');
+define("T6_MIN", '16.20');
+define("T6_MINSTEPRIS", '205');
 define("T_MILJOPAKKEN", '8');
 define("T_MILJOPAKKEN_9", '24');
 
@@ -106,10 +130,51 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 	} else {
 		$minutter = $_POST['kjoretid'];
 	}
-	$pris = T_START + ($_POST['kilometer'] * T_KM) + (T_MIN * $minutter);
+	$tid = explode(':', $_POST['tid']);
+	if($_POST['ukedag'] == 'U'){
+		if($tid[0] >= 0 AND $tid[0] < 6){
+			$km = T4_KM;
+			$start = T4_START;
+			$min = T4_MIN;
+			$minstepris = T4_MINSTEPRIS;			
+		} elseif(($tid[0] >= 6 and $tid[0] < 9) OR ($tid[0] >= 15 and $tid[0] < 18)) {
+			$km = T2_KM;
+			$start = T2_START;
+			$min = T2_MIN;
+			$minstepris = T2_MINSTEPRIS;
+		}elseif($tid[0] >= 9 AND $tid[0] < 15){
+			$km = T1_KM;
+			$start = T1_START;
+			$min = T1_MIN;
+			$minstepris = T1_MINSTEPRIS;			
+		}elseif($tid[0] >= 18 AND $tid[0] < 24){
+			$km = T3_KM;
+			$start = T3_START;
+			$min = T3_MIN;
+			$minstepris = T3_MINSTEPRIS;			
+		}
+	} elseif($_POST['ukedag'] == 'L' OR $_POST['ukedag'] == 'S'){
+		if($tid[0] >= 6 AND $tid[0] < 24){
+			$km = T3-HELG_KM;
+			$start = T3-HELG_START;
+			$min = T3-HELG_MIN;
+			$minstepris = T3-HELG_MINSTEPRIS;
+		}else{
+			$km = T5_KM;
+			$start = T5_START;
+			$min = T5_MIN;
+			$minstepris = T5_MINSTEPRIS;
+		}
+	} elseif($_POST['ukedag'] == 'H'){
+		$km = T6_KM;
+		$start = T6_START;
+		$min = T6_MIN;
+		$minstepris = T6_MINSTEPRIS;
+	}
+	$pris = $start + ($_POST['kilometer'] * $km) + ($min * $minutter);
 	/*echo T_START ." + (". $_POST['kilometer'] ." * ". T_KM .") + (". T_MIN ." * ". $minutter .")";*/
-	if($pris < T_MINSTEPRIS) {
-		$pris = T_MINSTEPRIS;
+	if($pris < $minstepris) {
+		$pris = $minstepris;
 	}
 	if($_POST['takst'] == 5){
 		$pris = $pris * 1.5;
@@ -129,9 +194,8 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 <html lang="nb">
   <head>
     <title>Uoffisiell priskalkulator, Trøndertaxi</title>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <link href="style.css" rel="stylesheet">
-    <!-- <script src="script.js"></script> -->
     <script>
     function valueChanged()
     {
@@ -158,7 +222,7 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
       <form id="form" name="form" action="" method="POST">
       <div>
 		<p>
-			<label for="sone">takstområde:</label>
+			<label for="sone">Takstområde:</label>
 			<select name="sone" id="sone">
 			  <option value="distrikt">Distrikt</option>
 			  <option value="trondheim">Trondheim</option>
@@ -194,14 +258,18 @@ if(isset($_POST['kilometer']) AND $_POST['sone'] == "distrikt"){
 		</select>
 		</p>
 		<p>
-          <label class="distrikt">Henting?</label><input class="henting distrikt" id="henting" type="checkbox" checked onchange="valueChanged()" name="henting">
+          <label class="distrikt">Henting?</label><input class="henting distrikt checkbox" id="henting" type="checkbox" checked onchange="valueChanged()" name="henting">
           <label class="fremkjoring distrikt">Kilometer fremkjøring:</label><br />
           <input class="fremkjoring distrikt" type="text" id="fremkjoring" name="fremkjoring"></p>
         <p>
 		<input id="submit" type="submit" name="submit" value="Submit">
 		<?php
-		echo $pris ."<br />";
-		echo round($pris);
+		/*echo $pris ."<br />";*/
+		if(isset($_POST['kilometer'])){
+			?>
+			Beregnet pris er <?php echo round($pris); ?> kr.;
+			<?php
+		}
 		?>
       </div>
     </form>
